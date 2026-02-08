@@ -10,6 +10,8 @@ import com.example.festival.dto.CreateSlotRequest;
 import com.example.festival.repository.SlotRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import com.example.festival.patterns.AppConfig;
+import com.example.festival.patterns.SlotBuilder;
 
 
 @Service
@@ -34,7 +36,7 @@ public class FestivalService {
             throw new TimeCollisionException(
                     "Stage time collision");
         }
-
+        System.out.println(AppConfig.getInstance().getApplicationName());
         System.out.println("Slot scheduled successfully");
     }
 
@@ -58,8 +60,12 @@ public class FestivalService {
         LocalDateTime start = LocalDateTime.parse(req.start);
         LocalDateTime end = LocalDateTime.parse(req.end);
 
-        Slot slot = new Slot(band, stage, start, end);
-
+        Slot slot = new SlotBuilder()
+                .band(band)
+                .stage(stage)
+                .start(start)
+                .end(end)
+                .build();
         scheduleSlot(slot);
     }
 }

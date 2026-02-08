@@ -11,7 +11,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.example.festival.patterns.EntityFactory;
+import com.example.festival.patterns.EntityType;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -187,7 +188,8 @@ public class SlotRepository implements CrudRepository<Slot> {
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) return null;
 
-            return new Band(
+            return (Band) EntityFactory.createEntity(
+                    EntityType.BAND,
                     rs.getInt("band_id"),
                     rs.getString("band_name"),
                     rs.getString("country"),
