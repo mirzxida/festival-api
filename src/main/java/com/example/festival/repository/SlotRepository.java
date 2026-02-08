@@ -2,6 +2,7 @@ package com.example.festival.repository;
 
 import com.example.festival.model.Band;
 import com.example.festival.model.Slot;
+import com.example.festival.model.Stage;
 import com.example.festival.repository.interfaces.CrudRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -177,5 +178,39 @@ public class SlotRepository implements CrudRepository<Slot> {
         return bands;
     }
 
+    public Band findBandById(int id) throws Exception {
+        String sql = "SELECT band_id, band_name, country, genre FROM bands WHERE band_id = ?";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) return null;
+
+            return new Band(
+                    rs.getInt("band_id"),
+                    rs.getString("band_name"),
+                    rs.getString("country"),
+                    rs.getString("genre")
+            );
+        }
+    }
+
+    public Stage findStageById(int id) throws Exception {
+        String sql = "SELECT stage_id, stage_name, capacity FROM stages WHERE stage_id = ?";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) return null;
+
+            return new Stage(
+                    rs.getInt("stage_id"),
+                    rs.getString("stage_name"),
+                    rs.getInt("capacity")
+            );
+        }
+    }
 
 }
